@@ -1,0 +1,141 @@
+mkdir nursing_chatbot
+cd nursing_chatbot
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+pip install flask openai
+
+from flask import Flask, request, jsonify
+import openai
+import os
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+openai.api_key = os.getenv('OPENAI_API_KEY')
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_input = data['message']
+
+    response = openai.Completion.create(
+        engine="text-davinci-004",
+        prompt=user_input,
+        max_tokens=150
+    )
+
+    return jsonify({"response": response.choices[0].text.strip()})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+export OPENAI_API_KEY='your_openai_api_key'
+
+set OPENAI_API_KEY=your_openai_api_key
+
+npx create-react-app nursing-chatbot-web
+cd nursing-chatbot-web
+npm install axios
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.css';
+
+function App() {
+  const [message, setMessage] = useState('');
+  const [response, setResponse] = useState('');
+
+  const sendMessage = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/chat', { message });
+      setResponse(res.data.response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Nursing Chatbot</h1>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Ask a question..."
+          rows="4"
+          cols="50"
+        />
+        <button onClick={sendMessage}>Send</button>
+        <div className="response">
+          <h2>Response:</h2>
+          <p>{response}</p>
+        </div>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+textarea {
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #61dafb;
+  color: white;
+}
+
+.response {
+  margin-top: 20px;
+  text-align: left;
+  width: 80%;
+}
+
+python app.py
+
+npm start
+
+requirements.txt
+
+pip freeze > requirements.txt
+
+git init
+heroku create
+git add .
+git commit -m "Initial commit"
+git push heroku master
+
+heroku config:set OPENAI_API_KEY=your_openai_api_key
+
+npm install -g vercel
+
+vercel
